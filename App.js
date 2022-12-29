@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import {
+  LogBox,
+  StatusBar,
+  SafeAreaView,
+  View,
+  Image,
+  StyleSheet,
+} from "react-native";
+import Navigation from "./src/Screens/Navigations/Navigation";
+import firebase from "firebase";
 
-export default function App() {
+import { FIREBASE_CONFIG } from "./src/config";
+
+firebase.initializeApp(FIREBASE_CONFIG);
+
+function App({}) {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1 }}>
+      <Navigation />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
+const styles = StyleSheet.create({});
