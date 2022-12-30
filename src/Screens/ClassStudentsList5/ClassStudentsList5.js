@@ -26,6 +26,7 @@ function ClassStudentsList5({ navigation }) {
   const [loader, setLoader] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [objectKey, setObjectKey] = useState("");
+  const [object, setObject] = useState("");
 
   useEffect(() => {
     getData();
@@ -49,6 +50,7 @@ function ClassStudentsList5({ navigation }) {
             studentName: child.val().studentName,
             Status: child.val().Status,
             studentClass: child.val().studentClass,
+            notificationToken: child.val().NotificationToken,
           });
         });
         setLoader(false);
@@ -71,6 +73,7 @@ function ClassStudentsList5({ navigation }) {
           onPress={() => {
             setShowModal(true);
             setObjectKey(item.key);
+            setObject(item);
           }}
           style={style.servicesContain}
         >
@@ -153,6 +156,7 @@ function ClassStudentsList5({ navigation }) {
         hideModal={hideModal}
         navigation={navigation}
         objectKey={objectKey}
+        object={object}
       />
     </View>
   );

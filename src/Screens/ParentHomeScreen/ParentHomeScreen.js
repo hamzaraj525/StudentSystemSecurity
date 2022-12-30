@@ -57,94 +57,94 @@ function ParentHomeScreen({ navigation }) {
   const { parentCnic } = useSelector((reducers) => reducers.ParentReducer);
 
   const handleAllNotifications = (item) => {
-    if (item.NotificationToken === "1") {
-      scheduleNotificationHandler1();
-    } else if (item.NotificationToken === "2") {
-      scheduleNotificationHandler2();
-    } else if (item.NotificationToken === "3") {
-      scheduleNotificationHandler3();
-    } else if (item.NotificationToken === "4") {
-      scheduleNotificationHandler4();
-    } else {
-      console.log("nothing");
-    }
+    // if (item.NotificationToken === "1") {
+    //   scheduleNotificationHandler1();
+    // } else if (item.NotificationToken === "2") {
+    //   scheduleNotificationHandler2();
+    // } else if (item.NotificationToken === "3") {
+    //   scheduleNotificationHandler3();
+    // } else if (item.NotificationToken === "4") {
+    //   scheduleNotificationHandler4();
+    // } else {
+    //   console.log("nothing");
+    // }
   };
 
-  const scheduleNotificationHandler1 = async () => {
-    const hasPushNotificationPermissionGranted =
-      await allowsNotificationsAsync();
+  // const scheduleNotificationHandler1 = async () => {
+  //   const hasPushNotificationPermissionGranted =
+  //     await allowsNotificationsAsync();
 
-    if (!hasPushNotificationPermissionGranted) {
-      await requestPermissionsAsync();
-    }
+  //   if (!hasPushNotificationPermissionGranted) {
+  //     await requestPermissionsAsync();
+  //   }
 
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Student Security System",
-        body: "Your child is present at school",
-      },
-      trigger: {
-        seconds: 1,
-      },
-    });
-  };
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "Student Security System",
+  //       body: "Your child is present at school",
+  //     },
+  //     trigger: {
+  //       seconds: 1,
+  //     },
+  //   });
+  // };
 
-  const scheduleNotificationHandler2 = async () => {
-    const hasPushNotificationPermissionGranted =
-      await allowsNotificationsAsync();
+  // const scheduleNotificationHandler2 = async () => {
+  //   const hasPushNotificationPermissionGranted =
+  //     await allowsNotificationsAsync();
 
-    if (!hasPushNotificationPermissionGranted) {
-      await requestPermissionsAsync();
-    }
+  //   if (!hasPushNotificationPermissionGranted) {
+  //     await requestPermissionsAsync();
+  //   }
 
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Student Security System",
-        body: "Your child is checked out class school ",
-      },
-      trigger: {
-        seconds: 1,
-      },
-    });
-  };
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "Student Security System",
+  //       body: "Your child is checked out class school ",
+  //     },
+  //     trigger: {
+  //       seconds: 1,
+  //     },
+  //   });
+  // };
 
-  const scheduleNotificationHandler3 = async () => {
-    const hasPushNotificationPermissionGranted =
-      await allowsNotificationsAsync();
+  // const scheduleNotificationHandler3 = async () => {
+  //   const hasPushNotificationPermissionGranted =
+  //     await allowsNotificationsAsync();
 
-    if (!hasPushNotificationPermissionGranted) {
-      await requestPermissionsAsync();
-    }
+  //   if (!hasPushNotificationPermissionGranted) {
+  //     await requestPermissionsAsync();
+  //   }
 
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Student Security System",
-        body: "Your child is not arrived at school",
-      },
-      trigger: {
-        seconds: 1,
-      },
-    });
-  };
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "Student Security System",
+  //       body: "Your child is not arrived at school",
+  //     },
+  //     trigger: {
+  //       seconds: 1,
+  //     },
+  //   });
+  // };
 
-  const scheduleNotificationHandler4 = async () => {
-    const hasPushNotificationPermissionGranted =
-      await allowsNotificationsAsync();
+  // const scheduleNotificationHandler4 = async () => {
+  //   const hasPushNotificationPermissionGranted =
+  //     await allowsNotificationsAsync();
 
-    if (!hasPushNotificationPermissionGranted) {
-      await requestPermissionsAsync();
-    }
+  //   if (!hasPushNotificationPermissionGranted) {
+  //     await requestPermissionsAsync();
+  //   }
 
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Student Security System",
-        body: "Your child is on the bus now",
-      },
-      trigger: {
-        seconds: 1,
-      },
-    });
-  };
+  //   Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "Student Security System",
+  //       body: "Your child is on the bus now",
+  //     },
+  //     trigger: {
+  //       seconds: 1,
+  //     },
+  //   });
+  // };
 
   useEffect(() => {
     getData();
