@@ -20,11 +20,15 @@ const { height, width } = Dimensions.get("window");
 const AttendanceModal = (props) => {
   const [date, setDate] = useState(new Date());
 
-  console.log('token................................', props.object);
- 
+  console.log("token................................", props.object);
+
   const updateHomeStatus = () => {
     props.hideModal();
-    pushNotification({token: props.object?.notificationToken, title: "Status", body: "Your child is present at school"})
+    pushNotification({
+      token: props.object?.notificationToken,
+      title: "Student security system",
+      body: `${props.object.studentName}is present at school`,
+    });
     firebase
       .database()
       .ref("studentsData/" + props.objectKey)
@@ -52,7 +56,11 @@ const AttendanceModal = (props) => {
 
   const updateCheckedOut = () => {
     props.hideModal();
-    pushNotification({token: props.object?.notificationToken, title: "Status", body: "Your child is checked out class school"})
+    pushNotification({
+      token: props.object?.notificationToken,
+      title: "Student security system",
+      body: `${props.object.studentName}is checked out of school`,
+    });
     firebase
       .database()
       .ref("studentsData/" + props.objectKey)
@@ -64,14 +72,18 @@ const AttendanceModal = (props) => {
         console.log("Student Checked out  Status updated.");
       });
   };
-  
+
   const updateNotArrived = () => {
     props.hideModal();
-    pushNotification({token: props.object?.notificationToken, title: "Status", body: "Your child is not arrived at school"})
-    
+    pushNotification({
+      token: props.object?.notificationToken,
+      title: "Student security system",
+      body: `${props.object.studentName}is not arrived at school`,
+    });
+
     firebase
-    .database()
-    .ref("studentsData/" + props.objectKey)
+      .database()
+      .ref("studentsData/" + props.objectKey)
       .update({
         Status: "Not Arrived",
         // NotificationToken: "3",
@@ -88,16 +100,20 @@ const AttendanceModal = (props) => {
               (date.getMonth() + 1) +
               " / " +
               date.getFullYear(),
-            })
-            .then(() => {
-              console.log("Student Present Status updated.");
-            });
+          })
+          .then(() => {
+            console.log("Student Present Status updated.");
+          });
       });
-    };
-    
+  };
+
   const updateBus = () => {
     props.hideModal();
-    pushNotification({token: props.object?.notificationToken, title: "Status", body: "Your child is on the bus now"})
+    pushNotification({
+      token: props.object?.notificationToken,
+      title: "Student security system",
+      body: `${props.object.studentName}is on the bus now`,
+    });
     firebase
       .database()
       .ref("studentsData/" + props.objectKey)
