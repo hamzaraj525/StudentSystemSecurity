@@ -75,7 +75,7 @@ function App() {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log("token", token);
+      console.log("token-", token);
     } else {
       Alert.alert("Must use physical device for Push Notifications");
     }

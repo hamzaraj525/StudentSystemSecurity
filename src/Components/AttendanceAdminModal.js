@@ -11,6 +11,7 @@ import {
   StatusBar,
   StyleSheet,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import * as Animatable from "react-native-animatable";
 import firebase from "firebase";
 import Constraints from "../Constraints/Constraints";
@@ -18,12 +19,14 @@ import { useNavigation } from "@react-navigation/native";
 const { height, width } = Dimensions.get("window");
 
 const AttendanceAdminModal = (props) => {
+  const { tokenUser } = useSelector((reducers) => reducers.ParentReducer);
   const navigation = useNavigation();
+
   const updateHomeArrived = () => {
     props.hideModal();
     firebase
       .database()
-      .ref("studentsData/" + props.objectKey)
+      .ref(`studentsData/${props.objectKey}`)
       .update({
         Status: "Home Arrived",
       })
@@ -36,9 +39,10 @@ const AttendanceAdminModal = (props) => {
     props.hideModal();
     firebase
       .database()
-      .ref("studentsData/" + props.objectKey)
+      .ref(`studentsData/${props.objectKey}`)
       .update({
         Status: "Leaving Home",
+        Notifications: tokenUser,
       })
       .then(() => {
         console.log("Student Checked Out Status updated.");

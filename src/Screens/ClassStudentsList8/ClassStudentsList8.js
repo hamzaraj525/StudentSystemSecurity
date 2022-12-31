@@ -50,8 +50,7 @@ function ClassStudentsList8({ navigation }) {
             studentName: child.val().studentName,
             Status: child.val().Status,
             studentClass: child.val().studentClass,
-            notificationToken: child.val().NotificationToken,
-
+            Notifications: child.val().Notifications,
           });
         });
         setLoader(false);
@@ -75,7 +74,6 @@ function ClassStudentsList8({ navigation }) {
             setShowModal(true);
             setObjectKey(item.key);
             setObject(item);
-
           }}
           style={style.servicesContain}
         >
@@ -159,7 +157,6 @@ function ClassStudentsList8({ navigation }) {
         navigation={navigation}
         objectKey={objectKey}
         object={object}
-
       />
     </View>
   );

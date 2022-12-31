@@ -1,5 +1,6 @@
 const initialState = {
   parentCnic: "",
+  tokenUser: "",
 };
 export const ParentReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -7,6 +8,11 @@ export const ParentReducer = (state = initialState, action) => {
       return {
         ...state,
         parentCnic: action.parentCnic,
+      };
+    case "ADD_USER_TOKEN":
+      return {
+        ...state,
+        tokenUser: action.tokenUser,
       };
   }
   return state;

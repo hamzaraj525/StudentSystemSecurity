@@ -13,11 +13,11 @@ import {
   Alert,
   Pressable,
 } from "react-native";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import style from "./style";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 import firebase from "firebase";
 
@@ -30,64 +30,7 @@ const UploadNewStudent = ({ navigation, route }) => {
   const [studentClass, setStudentClass] = useState("");
   const [date, setDate] = useState(new Date());
   const [loader, setLoader] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const notificationListener = useRef();
-  const responseListener = useRef();
 
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-    }),
-  });
-  
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-  
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-    });
-  
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-    });
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
-   
-  async function registerForPushNotificationsAsync() {
-    let token;
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      // console.log('status', status);
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        Alert.alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log('token....', token);
-    } else {
-      Alert.alert('Must use physical device for Push Notifications');
-    }
-  
-    if (Platform.OS === 'android') {
-  
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-  
-    return token;
-  }
   //will post data to realTime Database
   const postData = async () => {
     const newReference = firebase.database().ref("/studentsData").push();
@@ -114,7 +57,6 @@ const UploadNewStudent = ({ navigation, route }) => {
           studentClass: studentClass,
           Status: "Home",
           Attendance: "",
-          NotificationToken: expoPushToken
         })
         .then(() => {
           setLoader(false);

@@ -10,141 +10,90 @@ import {
 } from "react-native";
 import style from "./style";
 import firebase from "firebase/app";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { cardColors } from "../../DataStore/TimeData";
 import AttendanceAdminModal from "../../Components/AttendanceAdminModal";
 import AttendanceDetails from "../../Components/AttendanceDetails";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => {
-    return {
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-      shouldShowAlert: true,
-    };
-  },
-});
-
-const allowsNotificationsAsync = async () => {
-  const settings = await Notifications.getPermissionsAsync();
-  return (
-    settings.granted ||
-    settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
-  );
-};
-
-const requestPermissionsAsync = async () => {
-  return await Notifications.requestPermissionsAsync({
-    ios: {
-      allowAlert: true,
-      allowBadge: true,
-      allowSound: true,
-      allowAnnouncements: true,
-    },
-  });
-};
+import { addExpoToken } from "../../Redux/Action/actions";
+import Constants from "expo-constants";
 
 function ParentHomeScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const [loader, setLoader] = useState(false);
   const { height } = Dimensions.get("window");
   const [objectKey, setObjectKey] = useState("");
+  const [object, setObject] = useState("");
   const [notificationTxt, setNotificationTxt] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showModalAttendance, setShowModalAttendance] = useState(false);
   const { parentCnic } = useSelector((reducers) => reducers.ParentReducer);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  const handleAllNotifications = (item) => {
-    // if (item.NotificationToken === "1") {
-    //   scheduleNotificationHandler1();
-    // } else if (item.NotificationToken === "2") {
-    //   scheduleNotificationHandler2();
-    // } else if (item.NotificationToken === "3") {
-    //   scheduleNotificationHandler3();
-    // } else if (item.NotificationToken === "4") {
-    //   scheduleNotificationHandler4();
-    // } else {
-    //   console.log("nothing");
-    // }
-  };
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
 
-  // const scheduleNotificationHandler1 = async () => {
-  //   const hasPushNotificationPermissionGranted =
-  //     await allowsNotificationsAsync();
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
+      console.log("token----g-----" + token);
+      dispatch(addExpoToken(token));
+    });
 
-  //   if (!hasPushNotificationPermissionGranted) {
-  //     await requestPermissionsAsync();
-  //   }
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {});
 
-  //   Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: "Student Security System",
-  //       body: "Your child is present at school",
-  //     },
-  //     trigger: {
-  //       seconds: 1,
-  //     },
-  //   });
-  // };
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {});
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
-  // const scheduleNotificationHandler2 = async () => {
-  //   const hasPushNotificationPermissionGranted =
-  //     await allowsNotificationsAsync();
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      // console.log('status', status);
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        Alert.alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log("token....", token);
+    } else {
+      Alert.alert("Must use physical device for Push Notifications");
+    }
 
-  //   if (!hasPushNotificationPermissionGranted) {
-  //     await requestPermissionsAsync();
-  //   }
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
 
-  //   Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: "Student Security System",
-  //       body: "Your child is checked out class school ",
-  //     },
-  //     trigger: {
-  //       seconds: 1,
-  //     },
-  //   });
-  // };
-
-  // const scheduleNotificationHandler3 = async () => {
-  //   const hasPushNotificationPermissionGranted =
-  //     await allowsNotificationsAsync();
-
-  //   if (!hasPushNotificationPermissionGranted) {
-  //     await requestPermissionsAsync();
-  //   }
-
-  //   Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: "Student Security System",
-  //       body: "Your child is not arrived at school",
-  //     },
-  //     trigger: {
-  //       seconds: 1,
-  //     },
-  //   });
-  // };
-
-  // const scheduleNotificationHandler4 = async () => {
-  //   const hasPushNotificationPermissionGranted =
-  //     await allowsNotificationsAsync();
-
-  //   if (!hasPushNotificationPermissionGranted) {
-  //     await requestPermissionsAsync();
-  //   }
-
-  //   Notifications.scheduleNotificationAsync({
-  //     content: {
-  //       title: "Student Security System",
-  //       body: "Your child is on the bus now",
-  //     },
-  //     trigger: {
-  //       seconds: 1,
-  //     },
-  //   });
-  // };
+    return token;
+  }
 
   useEffect(() => {
     getData();
@@ -168,7 +117,7 @@ function ParentHomeScreen({ navigation }) {
             studentName: child.val().studentName,
             Status: child.val().Status,
             studentClass: child.val().studentClass,
-            NotificationToken: child.val().NotificationToken,
+            Notifications: child.val().Notifications,
           });
         });
         setLoader(false);
@@ -193,14 +142,12 @@ function ParentHomeScreen({ navigation }) {
       .join("")
       .toUpperCase();
     if (item.parentCNIC === parentCnic) {
-      {
-        handleAllNotifications(item);
-      }
       return (
         <Pressable
           onPress={() => {
             setShowModal(true);
             setObjectKey(item.key);
+            setObject(item);
           }}
           style={style.servicesContain}
         >
@@ -281,6 +228,7 @@ function ParentHomeScreen({ navigation }) {
         showAttendanceModal={showAttendanceModal}
         navigation={navigation}
         objectKey={objectKey}
+        object={object}
       />
     </View>
   );

@@ -44,7 +44,7 @@ function ClassStudentsList1({ navigation }) {
             studentName: child.val().studentName,
             Status: child.val().Status,
             studentClass: child.val().studentClass,
-            notificationToken: child.val().NotificationToken,
+            Notifications: child.val().Notifications,
           });
         });
         setLoader(false);

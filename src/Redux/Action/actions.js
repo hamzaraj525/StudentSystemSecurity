@@ -5,3 +5,10 @@ export const addParentCnic = (parentCnic) => {
     parentCnic: parentCnic,
   };
 };
+export const addExpoToken = (tokenUser) => {
+  console.log("tokenUser--Redux---", tokenUser);
+  return {
+    type: "ADD_USER_TOKEN",
+    tokenUser: tokenUser,
+  };
+};

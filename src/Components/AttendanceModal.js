@@ -20,14 +20,12 @@ const { height, width } = Dimensions.get("window");
 const AttendanceModal = (props) => {
   const [date, setDate] = useState(new Date());
 
-  console.log("token................................", props.object);
-
   const updateHomeStatus = () => {
     props.hideModal();
     pushNotification({
-      token: props.object?.notificationToken,
+      token: props.object?.Notifications,
       title: "Student security system",
-      body: `${props.object.studentName}is present at school`,
+      body: `${props.object.studentName} is present at school`,
     });
     firebase
       .database()
@@ -57,9 +55,9 @@ const AttendanceModal = (props) => {
   const updateCheckedOut = () => {
     props.hideModal();
     pushNotification({
-      token: props.object?.notificationToken,
+      token: props.object?.Notifications,
       title: "Student security system",
-      body: `${props.object.studentName}is checked out of school`,
+      body: `${props.object.studentName} is checked out of school`,
     });
     firebase
       .database()
@@ -76,9 +74,9 @@ const AttendanceModal = (props) => {
   const updateNotArrived = () => {
     props.hideModal();
     pushNotification({
-      token: props.object?.notificationToken,
+      token: props.object?.Notifications,
       title: "Student security system",
-      body: `${props.object.studentName}is not arrived at school`,
+      body: `${props.object.studentName} is not arrived at school`,
     });
 
     firebase
@@ -110,9 +108,9 @@ const AttendanceModal = (props) => {
   const updateBus = () => {
     props.hideModal();
     pushNotification({
-      token: props.object?.notificationToken,
+      token: props.object?.Notifications,
       title: "Student security system",
-      body: `${props.object.studentName}is on the bus now`,
+      body: `${props.object.studentName} is on the bus now`,
     });
     firebase
       .database()
