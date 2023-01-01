@@ -1,22 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  LogBox,
-  StatusBar,
-  SafeAreaView,
-  View,
-  Alert,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { View, Alert, StyleSheet } from "react-native";
 import Navigation from "./src/Screens/Navigations/Navigation";
 import firebase from "firebase";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-
 import { FIREBASE_CONFIG } from "./src/config";
-
 // firebase.initializeApp(FIREBASE_CONFIG);
-
 !firebase.apps.length
   ? firebase.initializeApp(FIREBASE_CONFIG)
   : firebase.app();
